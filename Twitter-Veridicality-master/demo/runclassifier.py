@@ -23,7 +23,7 @@ from signal import *
 from optparse import OptionParser
 
 BASE_DIR = 'twitter_nlp.jar'
-print os.environ
+print(os.environ)
 if os.environ.has_key('TWITTER_NLP'):
     BASE_DIR = os.environ['TWITTER_NLP']
 
@@ -40,7 +40,7 @@ from Vocab import Vocab
 sys.path.append('%s/python' % (BASE_DIR))
 sys.path.append('%s/python/cap' % (BASE_DIR))
 
-print sys.path
+print(sys.path)
 import numpy as np
 import cap_classifier
 import pos_tagger_stdin
@@ -57,56 +57,56 @@ import pickle
 # Helper functions
 ###########################################################
 class LRmulticlass(object):
-        def __init__(self):
-                self.model = None
-        
-        def json2Vocab(self, jsonInstance):
-                vocabd = {}
-                for k in jsonInstance.keys():
-                        vocabd[self.vocab.GetID(k)] = jsonInstance[k]
-                return vocabd
-        
-        def json2Vector(self, jsonInstance):
-                result = np.zeros(self.vocab.GetVocabSize())
-                for k in jsonInstance.keys():
-                        if self.vocab.GetID(k) > 0:
-                                result[self.vocab.GetID(k)-1] = jsonInstance[k]
-                return result
-        
-        def Train(self, jsonDataset):
-                x, y = [d[0] for d in jsonDataset], [int(d[1]) for d in jsonDataset]
-                self.vocab = Vocab()
-                x_vocabd = [self.json2Vocab(d) for d in x]
-                self.vocab.Lock()
-                X_matrix = np.zeros((len(x_vocabd), self.vocab.GetVocabSize()))
-                for i in range(len(x_vocabd)):
-                        for (j,v) in x_vocabd[i].items():
-                                X_matrix[i,j-1] = v
-                lrmulti = LogisticRegression(solver='lbfgs', multi_class='multinomial')
-                lrmulti.fit(X_matrix, np.array(y))
-                self.model = lrmulti
-        
-        def Predict(self, jsonInstance):
-		fsvoc = open("vocab_train.save", 'rb')
-		self.vocab = pickle.load(fsvoc)
-		self.vocab.Lock()
-		#print self.vocab.GetVocabSize()
-                return self.model.predict(self.json2Vector(jsonInstance).reshape(1,-1))
-        
-        def PredictProba(self, jsonInstance):
-                return self.model.predict_proba(self.json2Vector(jsonInstance).reshape(1,-1))
-        
-        def printWeights(self, outFile):
-                fwout = open(outFile, 'w')
-                classes = self.model.coef_.shape[0]
-                for i in range(classes):
-                        fwout.write("Class %s\n" % i)
-                        curCatWeights = self.model.coef_[i]
-                        for j in np.argsort(curCatWeights):
-                                try:
-                                        fwout.write("%s\t%s\n" % (self.vocab.GetWord(j+1), curCatWeights[j]))
-                                except KeyError:
-                                        pass
+    def __init__(self):
+            self.model = None
+    
+    def json2Vocab(self, jsonInstance):
+            vocabd = {}
+            for k in jsonInstance.keys():
+                    vocabd[self.vocab.GetID(k)] = jsonInstance[k]
+            return vocabd
+    
+    def json2Vector(self, jsonInstance):
+            result = np.zeros(self.vocab.GetVocabSize())
+            for k in jsonInstance.keys():
+                    if self.vocab.GetID(k) > 0:
+                            result[self.vocab.GetID(k)-1] = jsonInstance[k]
+            return result
+    
+    def Train(self, jsonDataset):
+            x, y = [d[0] for d in jsonDataset], [int(d[1]) for d in jsonDataset]
+            self.vocab = Vocab()
+            x_vocabd = [self.json2Vocab(d) for d in x]
+            self.vocab.Lock()
+            X_matrix = np.zeros((len(x_vocabd), self.vocab.GetVocabSize()))
+            for i in range(len(x_vocabd)):
+                    for (j,v) in x_vocabd[i].items():
+                            X_matrix[i,j-1] = v
+            lrmulti = LogisticRegression(solver='lbfgs', multi_class='multinomial')
+            lrmulti.fit(X_matrix, np.array(y))
+            self.model = lrmulti
+    
+    def Predict(self, jsonInstance):
+        fsvoc = open("vocab_train.save", 'rb')
+        self.vocab = pickle.load(fsvoc)
+        self.vocab.Lock()
+        #print self.vocab.GetVocabSize()
+        return self.model.predict(self.json2Vector(jsonInstance).reshape(1,-1))
+    
+    def PredictProba(self, jsonInstance):
+            return self.model.predict_proba(self.json2Vector(jsonInstance).reshape(1,-1))
+    
+    def printWeights(self, outFile):
+            fwout = open(outFile, 'w')
+            classes = self.model.coef_.shape[0]
+            for i in range(classes):
+                    fwout.write("Class %s\n" % i)
+                    curCatWeights = self.model.coef_[i]
+                    for j in np.argsort(curCatWeights):
+                            try:
+                                    fwout.write("%s\t%s\n" % (self.vocab.GetWord(j+1), curCatWeights[j]))
+                            except KeyError:
+                                    pass
 
 
 def isAscii(s): 
@@ -254,25 +254,25 @@ def entityHasNegation(t, k, tweet, tags, features):
                                 setFeature(features, "Has Negation")                       
 
 def distanceToKwd(entity, opp, kwd, tweet, tags, features):
-        tidx = [i for i,x in enumerate(tweet) if x == entity]
-        oppidx = [i for i,x in enumerate(tweet) if x == opp]
-        kwdidx = [i for i,x in enumerate(tweet) if kwd in x.strip().lower()]
-        print tweet     
-        print "target ids"
-        print tidx      
-        print "opp ids" 
-        print oppidx
-        print "kwd ids" 
-        print kwdidx    
-        if len(tidx) > 0 and len(kwdidx) > 0:
-                tdistance = abs(tidx[0]-kwdidx[0])
-                odistance = 99
-                if len(oppidx) > 0:
-                        odistance = abs(oppidx[0]-kwdidx[0])
-                if tdistance < odistance:
-                        setFeature(features, "TARGET closer to KEYWORD")
-                else:   
-                        setFeature(features, "OPPONENT closer to KEYWORD")
+    tidx = [i for i,x in enumerate(tweet) if x == entity]
+    oppidx = [i for i,x in enumerate(tweet) if x == opp]
+    kwdidx = [i for i,x in enumerate(tweet) if kwd in x.strip().lower()]
+    print(tweet)     
+    print("target ids")
+    print(tidx)      
+    print("opp ids") 
+    print(oppidx)
+    print("kwd ids") 
+    print(kwdidx)    
+    if len(tidx) > 0 and len(kwdidx) > 0:
+        tdistance = abs(tidx[0]-kwdidx[0])
+        odistance = 99
+        if len(oppidx) > 0:
+            odistance = abs(oppidx[0]-kwdidx[0])
+        if tdistance < odistance:
+            setFeature(features, "TARGET closer to KEYWORD")
+        else:   
+            setFeature(features, "OPPONENT closer to KEYWORD")
                                                     
 def getsegments(tweet, annots, tag, lower=False, getIndices=True):
     result = []
@@ -304,24 +304,24 @@ def getsegments(tweet, annots, tag, lower=False, getIndices=True):
     return result
 
 def modTweetTargetEnt1(tweet, indices):
-        start = indices[0]
-        end = indices[1]
-        del tweet[start:end]
-        tweet.insert(start, "TARGET1")
-        return tweet
+    start = indices[0]
+    end = indices[1]
+    del tweet[start:end]
+    tweet.insert(start, "TARGET1")
+    return tweet
 
 def modTweetTargetOpp(tweet, indices):
-        start = indices[0]
-        end = indices[1]
-        del tweet[start:end]
-        tweet.insert(start, "OPPONENT")
-        return tweet
+    start = indices[0]
+    end = indices[1]
+    del tweet[start:end]
+    tweet.insert(start, "OPPONENT")
+    return tweet
 
 def removeHashTags(tweet):
-        mtweet = []
-        for word in tweet:
-                mtweet.append(word.replace("#", ""))
-        return mtweet
+    mtweet = []
+    for word in tweet:
+            mtweet.append(word.replace("#", ""))
+    return mtweet
 
 def reinstateHT(modtweet, tweet):
         for i in range(len(modtweet)):
