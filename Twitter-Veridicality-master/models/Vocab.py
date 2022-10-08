@@ -11,7 +11,7 @@ class Vocab:
                 self.word2id[word] = int(wid)
                 self.id2word[wid] = word
                 self.nextId = max(self.nextId, int(wid) + 1)
-    
+#thisehrnyfox
     def GetID(self, word):
         if not self.word2id.has_key(word):
             if self.locked:
