@@ -260,8 +260,8 @@ def distanceToKwd(entity, opp, kwd, tweet, tags, features):
         tidx = [i for i,x in enumerate(tweet) if x == entity]
         oppidx = [i for i,x in enumerate(tweet) if x == opp]
         kwdidx = [i for i,x in enumerate(tweet) if kwd in x.strip().lower()]
-        print tweet     
-        print "target ids"
+        print(tweet)     
+        print("target ids")
         print tidx      
         print "opp ids" 
         print oppidx
