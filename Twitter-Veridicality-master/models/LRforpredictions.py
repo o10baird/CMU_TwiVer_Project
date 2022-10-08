@@ -44,7 +44,7 @@ class LRmulticlass(object):
 		self.vocab = Vocab()
 		x_vocabd = [self.json2Vocab(d) for d in x]
 		with open("vocab_train.save", 'wb') as vocabfile:
-		    pickle.dump(self.vocab, vocabfile)
+			pickle.dump(self.vocab, vocabfile)
 		self.vocab.Lock()
 		X_matrix = np.zeros((len(x_vocabd), self.vocab.GetVocabSize()))
 		for i in range(len(x_vocabd)):
@@ -59,7 +59,7 @@ class LRmulticlass(object):
 
 	def Predict(self, jsonInstance):
 		with open("vocab_train.save", 'rb') as vocabfile:
-		    self.vocab = pickle.load(vocabfile)
+			self.vocab = pickle.load(vocabfile)
 		self.vocab.Lock()
 		return self.model.predict(self.json2Vector(jsonInstance).reshape(1,-1))
 
@@ -125,14 +125,14 @@ fileout = open(sys.argv[1].replace(".csv", ".predict.csv"), 'w')
 fout = csv.writer(fileout)
 
 for item in results:
-    d2w = []
-    if item == 3:
+	d2w = []
+	if item == 3:
 		d2w.append("positive")
 	elif item == 2:
 		d2w.append("neutral")
-    elif item == 1:
+	elif item == 1:
 		d2w.append("negative")
-    fout.writerow(d2w)
+	fout.writerow(d2w)
 
 #print "results"
 #print results
