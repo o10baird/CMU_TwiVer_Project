@@ -356,21 +356,21 @@ for row in data:
             DFSwithsource(edge, direction, visit, path, modLine, idx, entity2.lower(), d2w)
     #let us find indices of OPPONENT if present in tweet.
     curTweet = formtweet(modLine)
-    print curTweet
+    print(curTweet)
     if "Cricket".lower() in row[1].lower():
         #Oscar case opponents to be checked
         for item in cricketSet:
             if not item.strip().lower() == entity1.strip().lower():
-                print item
+                print(item)
                 #Then it is an opponent entity
                 oppIndices = []
                 for i, attr in enumerate(modLine):
                     #print attr[0].lower()
                     #print item.lower().strip(), attr[0].lower().strip()
                     if item.lower().strip() in attr[0].lower():
-                        print "added"
+                        print("added")
                         oppIndices.append(i+1)
-                print oppIndices
+                print(oppIndices)
                 for idx in oppIndices:
                     visit = set()
                     path = ""
@@ -380,16 +380,16 @@ for row in data:
         #Oscar case opponents to be checked
         for item in tennisSet:
             if not item.strip().lower() == entity1.strip().lower():
-                print item
+                print(item)
                 #Then it is an opponent entity
                 oppIndices = []
                 for i, attr in enumerate(modLine):
                     #print attr[0].lower()
                     #print item.lower().strip(), attr[0].lower().strip()
                     if item.lower().strip() in attr[0].lower():
-                        print "added"
+                        print("added")
                         oppIndices.append(i+1)
-                print oppIndices
+                print(oppIndices)
                 for idx in oppIndices:
                     visit = set()
                     path = ""
@@ -399,16 +399,16 @@ for row in data:
         #Oscar case opponents to be checked
         for item in rugbySet:
             if not item.lower() == entity1.strip().lower():
-                print item
+                print(item)
                 #Then it is an opponent entity
                 oppIndices = []
                 for i, attr in enumerate(modLine):
                     #print attr[0].lower()
                     #print item.lower().strip(), attr[0].lower().strip()
                     if item.lower().strip() in attr[0].lower():
-                        print "added"
+                        print("added")
                         oppIndices.append(i+1)
-                print oppIndices
+                print(oppIndices)
                 for idx in oppIndices:
                     visit = set()
                     path = ""
@@ -418,16 +418,16 @@ for row in data:
         #Oscar case opponents to be checked
         for item in footballSet:
             if not item.lower() == entity1.strip().lower():
-                print item
+                print(item)
                 #Then it is an opponent entity
                 oppIndices = []
                 for i, attr in enumerate(modLine):
                     #print attr[0].lower()
                     #print item.lower().strip(), attr[0].lower().strip()
                     if item.lower().strip() in attr[0].lower():
-                        print "added"
+                        print("added")
                         oppIndices.append(i+1)
-                print oppIndices
+                print(oppIndices)
                 for idx in oppIndices:
                     visit = set()
                     path = ""
@@ -437,16 +437,16 @@ for row in data:
         #Oscar case opponents to be checked
         for item in ballonSet:
             if not item.lower() == entity1.strip().lower():
-                print item
+                print(item)
                 #Then it is an opponent entity
                 oppIndices = []
                 for i, attr in enumerate(modLine):
                     #print attr[0].lower()
                     #print item.lower().strip(), attr[0].lower().strip()
                     if item.lower().strip() in attr[0].lower():
-                        print "added"
+                        print("added")
                         oppIndices.append(i+1)
-                print oppIndices
+                print(oppIndices)
                 for idx in oppIndices:
                     visit = set()
                     path = ""
@@ -456,16 +456,16 @@ for row in data:
         #Oscar case opponents to be checked
         for item in eurovisionSet:
             if not item.lower() == entity1.strip().lower():
-                print item
+                print(item)
                 #Then it is an opponent entity
                 oppIndices = []
                 for i, attr in enumerate(modLine):
                     #print attr[0].lower()
                     #print item.lower().strip(), attr[0].lower().strip()
                     if item.lower().strip() in attr[0].lower():
-                        print "added"
+                        print("added")
                         oppIndices.append(i+1)
-                print oppIndices
+                print(oppIndices)
                 for idx in oppIndices:
                     visit = set()
                     path = ""
@@ -476,14 +476,14 @@ for row in data:
         #election opponents
         for item in indelectionSet:
             if not item.lower() == entity1.strip().lower():
-                print item
+                print(item)
                 #Then it is an opponent entity
                 oppIndices = []
                 for i, attr in enumerate(modLine):
                     #print attr[0].lower()
                     if item.lower().strip()in attr[0].lower():
                         oppIndices.append(i+1)
-                print oppIndices
+                print(oppIndices)
                 for idx in oppIndices:
                     visit = set()
                     path = ""
@@ -497,14 +497,14 @@ for row in data:
         #election opponents
         for item in presidentialSet:
             if not item.lower() == entity1.strip().lower():
-                print item
+                print(item)
                 #Then it is an opponent entity
                 oppIndices = []
                 for i, attr in enumerate(modLine):
                     #print attr[0].lower()
                     if item.lower().strip()in attr[0].lower():
                         oppIndices.append(i+1)
-                print oppIndices
+                print(oppIndices)
                 for idx in oppIndices:
                     visit = set()
                     path = ""
