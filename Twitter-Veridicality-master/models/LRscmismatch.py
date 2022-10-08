@@ -123,7 +123,7 @@ elif sys.argv[1] == "desire":
 		goldLabelDev.append(int(row[-2]))
 		majClassClassifier.append(majClass)
 else:
-	print "argument needs to be veridicality/desire"
+	print("argument needs to be veridicality/desire")
 goldLabelDev = np.asarray(goldLabelDev)
 
 #print goldLabelDev
@@ -149,17 +149,17 @@ for i in range(len(results)):
 		#print "mismatch- " + str(tweetsList[i]) + " Gold Label- " + str(goldLabelDev[i]) + " Predicted label- " + str(results[i][0])
 		errOut.writerow(errorData)
 
-print "gold labels"
+print("gold labels")
 for i in range(len(goldLabelDev)):
-	print str(goldLabelDev[i])
+	print(str(goldLabelDev[i]))
 
-print ' '
-print "predicted labels with score"
+print(' ')
+print("predicted labels with score")
 for i in range(len(results)):
-	print str(results[i][0]), str(probscores[i])
+	print(str(results[i][0]), str(probscores[i]))
 	
 accuracy = count/len(results)
-print "Accuracy is %s" % (accuracy)
+print("Accuracy is %s" % (accuracy))
 
 bCount = 0
 for i in range(len(goldLabelDev)):
@@ -167,7 +167,7 @@ for i in range(len(goldLabelDev)):
 		bCount += 1
 
 bAccuracy = bCount/len(results)
-print "Baseline accuracy is %s" % (bAccuracy)
+print("Baseline accuracy is %s" % (bAccuracy))
 
 if sys.argv[1] == "veridicality":
 	lrModel.printWeights("all_category_weights_combined_48_with_dependency_veridicality_new.csv")
