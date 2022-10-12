@@ -18,7 +18,7 @@ import pickle
 
 # X_test = np.array(([ 6.8,  3.2,  5.9,  2.3], [ 4.6,  3.4,  1.4,  0.3]))
 # print classifier.predict(X_test)
-
+#Anybody else checking this thing?
 # print classifier.predict_proba(X_test)
 
 class LRmulticlass(object):
