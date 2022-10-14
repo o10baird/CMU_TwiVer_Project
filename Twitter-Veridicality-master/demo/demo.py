@@ -262,11 +262,11 @@ def distanceToKwd(entity, opp, kwd, tweet, tags, features):
         kwdidx = [i for i,x in enumerate(tweet) if kwd in x.strip().lower()]
         print(tweet)     
         print("target ids")
-        print tidx      
-        print "opp ids" 
-        print oppidx
-        print "kwd ids" 
-        print kwdidx    
+        print(tidx)    
+        print("opp ids") 
+        print(oppidx)
+        print("kwd ids")
+        print(kwdidx)   
         if len(tidx) > 0 and len(kwdidx) > 0:
                 tdistance = abs(tidx[0]-kwdidx[0])
                 odistance = 99
@@ -503,11 +503,11 @@ def GetLLda():
 
 def recomputeScores():
     for item in scores:
-	computedScores[item] = (scores[item]+ 1)/((scores[item] + len(scores))*1.0)
+	    computedScores[item] = (scores[item]+ 1)/((scores[item] + len(scores))*1.0)
 
 def displayScores():
     for item in computedScores:
-	print str(item) + " : " + str(computedScores[item])
+	    print(str(item) + " : " + str(computedScores[item]))
 
 
 posTagger = pos_tagger_stdin.PosTagger()
@@ -595,7 +595,7 @@ for item in formedQueries:
 completeTrack.strip()
 
 
-print completeTrack, formedQueries
+print(completeTrack, formedQueries)
 iterator = twitter_stream.statuses.filter(track=completeTrack, language="en")
 
 for tweet in iterator:
@@ -609,15 +609,15 @@ for tweet in iterator:
         #print ptweet['id']
         #print ptweet['text']
         doi.append(event)
-	foundEntity = False
-        for item in contenders:
-            if item.lower() in ptweet['text'].lower():
-                doi.append(item)
-                print "Found entity"
-		foundEntity = True
-                break
-	if not foundEntity:
-	    continue
+    foundEntity = False
+    for item in contenders:
+        if item.lower() in ptweet['text'].lower():
+            doi.append(item)
+            print("Found entity")
+		    foundEntity = True
+            break
+	    if not foundEntity:
+	        continue
         doi.append(ptweet['text'])
         doi.append(ptweet['created_at'])
         doi.append(ptweet['user']['screen_name'])
@@ -639,7 +639,7 @@ for tweet in iterator:
         #keep track of items to be added
         tweetText = doi[2]
         tweetWords = twokenize.tokenize(tweetText)
-        print tweetWords
+        print(tweetWords)
         seq_features = []
         tags = []
         
@@ -647,7 +647,7 @@ for tweet in iterator:
 
         pos = posTagger.TagSentence(tweetWords)
         pos = [re.sub(r':[^:]*$', '', p) for p in pos]  # remove weights
-        print pos
+        print(pos)
 
         word_pos = zip(tweetWords, [p.split(':')[0] for p in pos])
         chunk = chunkTagger.TagSentence(word_pos)
@@ -744,7 +744,7 @@ for tweet in iterator:
         segments = getsegments(tweetWords2, tweetTags2, "ENTITY")
         for segment in segments:
             segEnt = segment[0].split()[-1].strip()
-            print segEnt
+            print(segEnt)
             #print segEnt.lower(), ent1.lower()
             if segEnt.lower().strip() == ent1.lower().strip():
                 tweetWords2 = modTweetTargetEnt1(tweetWords2, segment[1])
@@ -772,8 +772,8 @@ for tweet in iterator:
             if ent1.lower() in mtweetWords[i].strip().lower():
                 mtweetWords[i] = "TARGET1"
                 tweetTags2[i] = "MOD"
-	    else:
-		for oppent in contenders:
+	        else:
+		        for oppent in contenders:
 		    if oppent.lower() in mtweetWords[i].strip().lower():
 			mtweetWords[i] = "OPPONENT"
 			tweetTags2[i] = "MOD"
