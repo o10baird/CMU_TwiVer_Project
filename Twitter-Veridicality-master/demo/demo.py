@@ -614,9 +614,9 @@ for tweet in iterator:
         if item.lower() in ptweet['text'].lower():
             doi.append(item)
             print("Found entity")
-		    foundEntity = True
+            foundEntity = True
             break
-	    if not foundEntity:
+        if not foundEntity:
 	        continue
         doi.append(ptweet['text'])
         doi.append(ptweet['created_at'])
@@ -774,10 +774,10 @@ for tweet in iterator:
                 tweetTags2[i] = "MOD"
 	        else:
 		        for oppent in contenders:
-		    if oppent.lower() in mtweetWords[i].strip().lower():
-			mtweetWords[i] = "OPPONENT"
-			tweetTags2[i] = "MOD"
-        mtweetWords = reinstateHT(mtweetWords, tweetWords2)
+		            if oppent.lower() in mtweetWords[i].strip().lower():
+			            mtweetWords[i] = "OPPONENT"
+			            tweetTags2[i] = "MOD"
+                        mtweetWords = reinstateHT(mtweetWords, tweetWords2)
 
         segments = getsegments(mtweetWords, tweetTags2, "ENTITY")
         #print segments
