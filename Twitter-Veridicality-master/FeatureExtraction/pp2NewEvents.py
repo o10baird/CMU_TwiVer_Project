@@ -120,7 +120,7 @@ for row in data:
 		segment = segments[0]
 	count = 1
 	while segment != None:
-		print segment
+		print(segment)
 		if not "Oscar" in segment[0] and not "NFL" in segment[0] and not "Ballon" in segment[0] and not "Eurovision" in segment[0] and not "World" in segment[0]:
 			tweet = collapseEntities(tweet, segment[1])
 			tags = collapseEntityTags(tags, segment[1])
