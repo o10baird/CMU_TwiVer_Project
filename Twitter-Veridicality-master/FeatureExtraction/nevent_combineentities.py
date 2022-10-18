@@ -29,7 +29,7 @@ for row in data:
         entityList.append(row[-3])
     allEntities.append(entityList)
 
-print len(allParses), len(allEntities)
+print(len(allParses), len(allEntities))
 
 for i in range(len(allParses)):
     dataForTweet = []

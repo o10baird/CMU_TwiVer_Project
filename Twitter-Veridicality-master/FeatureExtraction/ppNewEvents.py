@@ -184,16 +184,16 @@ for row in data:
 	#print segments
 	if len(row) == 7: #all cases except elections - only one entity
 		ent1 = row[-3].strip()
-                if len(ent1.split()) > 1:
-                    ent1 = ent1.split()[-1].strip()
-		segments = getsegments(tweet, tags, "ENTITY")		
-		for segment in segments:
-			segEnt = segment[0].split()[-1].strip()
-                        print segEnt
+if len(ent1.split()) > 1:
+    ent1 = ent1.split()[-1].strip()
+segments = getsegments(tweet, tags, "ENTITY")		
+for segment in segments:
+	segEnt = segment[0].split()[-1].strip()
+	print(segEnt)
 			#print segEnt.lower(), ent1.lower()
-			if segEnt.lower().strip() == ent1.lower().strip():				
-				tweet = modTweetTargetEnt1(tweet, segment[1])
-				tags = modTweetTarTags(tags, segment[1])				
+	if segEnt.lower().strip() == ent1.lower().strip():				
+		tweet = modTweetTargetEnt1(tweet, segment[1])
+		tags = modTweetTarTags(tags, segment[1])				
 	else: #presidential and indian elections
 		ent1 = row[-4].strip()
 		ent2 = row[-3].split(" ")[-1].strip()
@@ -207,7 +207,7 @@ for row in data:
 		segments2 = getsegments(tweet, tags, "ENTITY")
 		for segment in segments2:
 			segEnt = segment[0].split()[-1].strip()
-			print segEnt.lower(), ent2.lower()
+			print(segEnt.lower(), ent2.lower())
 			if segEnt.lower().strip() == ent2.lower().strip():				
 				tweet =modTweetTargetEnt2(tweet, segment[1])
 				tags = modTweetTarTags(tags, segment[1])		
@@ -257,7 +257,7 @@ for row in data:
 					tweet = modTweetTargetOpp(tweet, segment[1])
 					tags = modTweetTarTags(tags, segment[1])
 					break
-        elif "Eurovision" in row[3]:
+	elif "Eurovision" in row[3]:
 		#eurovision tweet
 		for segment in segments:
 			segEnt = segment[0].split()[-1].strip()
@@ -267,7 +267,7 @@ for row in data:
 					tweet = modTweetTargetOpp(tweet, segment[1])
 					tags = modTweetTarTags(tags, segment[1])
 					break
-        elif "Football" in row[3]:
+	elif "Football" in row[3]:
 		#football tweet
 		for segment in segments:
 			segEnt = segment[0].split()[-1].strip()
@@ -277,7 +277,7 @@ for row in data:
 					tweet = modTweetTargetOpp(tweet, segment[1])
 					tags = modTweetTarTags(tags, segment[1])
 					break
-        elif "Ind" in row[3]:
+	elif "Ind" in row[3]:
 		#Indian Election tweet
 		for segment in segments:
 			segEnt = segment[0].split()[-1].strip()
@@ -287,7 +287,7 @@ for row in data:
 					tweet = modTweetTargetOpp(tweet, segment[1])
 					tags = modTweetTarTags(tags, segment[1])
 					break
-        elif "Presidential" in row[3]:
+	elif "Presidential" in row[3]:
 		#pres election tweet
 		for segment in segments:
 			segEnt = segment[0].split()[-1].strip()
@@ -297,7 +297,7 @@ for row in data:
 					tweet = modTweetTargetOpp(tweet, segment[1])
 					tags = modTweetTarTags(tags, segment[1])
 					break
-        elif "Rugby" in row[3]:
+	elif "Rugby" in row[3]:
 		#rugby tweet
 		for segment in segments:
 			segEnt = segment[0].split()[-1].strip()
@@ -307,7 +307,7 @@ for row in data:
 					tweet = modTweetTargetOpp(tweet, segment[1])
 					tags = modTweetTarTags(tags, segment[1])
 					break
-        elif "Tennis" in row[3]:
+	elif "Tennis" in row[3]:
 		#eurovision tweet
 		for segment in segments:
 			segEnt = segment[0].split()[-1].strip()

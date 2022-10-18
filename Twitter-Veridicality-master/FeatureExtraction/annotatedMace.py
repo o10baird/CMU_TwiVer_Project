@@ -2,7 +2,7 @@ import csv
 import sys
 
 if len(sys.argv) != 2:
-    print "Usage: python annotatedMace.py <csv>"
+    print("Usage: python annotatedMace.py <csv>")
 
 fp = open(sys.argv[1], "rb")
 data = csv.reader(fp)
@@ -26,7 +26,7 @@ fp.seek(0, 0)
 data = csv.reader(fp)
 for item in data:
     randrow = item
-print randrow
+print(randrow)
 for key in tweetDict[randrow[3]]:
     heading.append(key)
 csv_w.writerow(heading)
@@ -43,4 +43,4 @@ for key in tweetDict:
     for key2 in tweetDict[key]:
         dataForItem.append(tweetDict[key][key2])
     csv_w.writerow(dataForItem)
-print tweetDict
+print(tweetDict)
