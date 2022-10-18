@@ -500,11 +500,11 @@ def GetLLda():
 
 def recomputeScores():
     for item in scores:
-	computedScores[item] = (scores[item]+ 1)/((scores[item] + len(scores))*1.0)
+	    computedScores[item] = (scores[item]+ 1)/((scores[item] + len(scores))*1.0)
 
 def displayScores():
     for item in computedScores:
-	print str(item) + " : " + str(computedScores[item])
+	    print(str(item) + " : " + str(computedScores[item]))
 
 
 posTagger = pos_tagger_stdin.PosTagger()
@@ -560,7 +560,7 @@ for line in open('%s/hbc/data/dict-label3' % (BASE_DIR)):
 #iterator = twitter_stream.statuses.filter(track="Trump", language="en")
 
 infile = open(sys.argv[1])
-print "Now processing event file....."
+print("Now processing event file.....")
 count = 0
 event = ""
 contenders = []
@@ -596,7 +596,7 @@ for line in infile.readlines():
 #iterator = twitter_stream.statuses.filter(track=completeTrack, language="en")
 
 fp = open(sys.argv[2])
-print "Now processing file with tweets....."
+print("Now processing file with tweets.....")
 import csv
 data = csv.reader(fp)
 
@@ -613,317 +613,317 @@ for row in data:
     for item in contenders:
         if item.lower() in tweet.lower():
             doi.append(item)
-            print "Found entity"
+            print("Found entity")
             foundEntity = True
         break
     if not foundEntity:
-	continue
-    doi.append(row[0]) #this is the tweet
-    doi.append(row[1]) #this should be the created at timestamp
-    doi.append(row[2]) #this should be the username
-    doi.append(row[3]) #this should be the URL
-    #doi[2] has the tweet data. We don't need to process for language and no need to remove dups since it is done one by one.
-    fptname = "tweet.txt"
-    #fpt = open("tweet.txt", 'w')
-    print doi[2]
-    #print type(doi[2])
-    # fpt.writelines(str(doi[2].decode('utf-8')))
-    #os.system('cd ../Twitter-NLP/twitter_nlp/')
-    #os.system('export TWITTER_NLP=./')
-    #os.system('cd -')
-    #os.system('python python/ner/extractEntities.py ' + "../../demo/" + fptname + " > " + fptname.replace(".txt", ".out"))
-    #os.system('cd -')
-    #fpner = open("../Twitter-NLP/twitter_nlp/" + fptname.replace(".txt", ".out"))
-    #need to create a new DS - tweet, tags, event, entities
-    #dataForProcessing = []
-    #keep track of items to be added
-    tweetText = doi[2]
-    tweetWords = twokenize.tokenize(tweetText)
-    print tweetWords
-    seq_features = []
-    tags = []
-        
-    goodCap = capClassifier.Classify(tweetWords) > 0.9
+	    continue
+doi.append(row[0]) #this is the tweet
+doi.append(row[1]) #this should be the created at timestamp
+doi.append(row[2]) #this should be the username
+doi.append(row[3]) #this should be the URL
+#doi[2] has the tweet data. We don't need to process for language and no need to remove dups since it is done one by one.
+fptname = "tweet.txt"
+#fpt = open("tweet.txt", 'w')
+print(doi[2])
+#print type(doi[2])
+# fpt.writelines(str(doi[2].decode('utf-8')))
+#os.system('cd ../Twitter-NLP/twitter_nlp/')
+#os.system('export TWITTER_NLP=./')
+#os.system('cd -')
+#os.system('python python/ner/extractEntities.py ' + "../../demo/" + fptname + " > " + fptname.replace(".txt", ".out"))
+#os.system('cd -')
+#fpner = open("../Twitter-NLP/twitter_nlp/" + fptname.replace(".txt", ".out"))
+#need to create a new DS - tweet, tags, event, entities
+#dataForProcessing = []
+#keep track of items to be added
+tweetText = doi[2]
+tweetWords = twokenize.tokenize(tweetText)
+print(tweetWords)
+seq_features = []
+tags = []
+    
+goodCap = capClassifier.Classify(tweetWords) > 0.9
 
-    pos = posTagger.TagSentence(tweetWords)
-    pos = [re.sub(r':[^:]*$', '', p) for p in pos]  # remove weights
-    print pos
+pos = posTagger.TagSentence(tweetWords)
+pos = [re.sub(r':[^:]*$', '', p) for p in pos]  # remove weights
+print(pos)
 
-    word_pos = zip(tweetWords, [p.split(':')[0] for p in pos])
-    chunk = chunkTagger.TagSentence(word_pos)
-    chunk = [c.split(':')[0] for c in chunk]  # remove weights
-    #print chunk
+word_pos = zip(tweetWords, [p.split(':')[0] for p in pos])
+chunk = chunkTagger.TagSentence(word_pos)
+chunk = [c.split(':')[0] for c in chunk]  # remove weights
+#print chunk
 
-    events = eventTagger.TagSentence(tweetWords, [p.split(':')[0] for p in pos])
-    events = [e.split(':')[0] for e in events]
-    #print events
+events = eventTagger.TagSentence(tweetWords, [p.split(':')[0] for p in pos])
+events = [e.split(':')[0] for e in events]
+#print events
 
-    quotes = Features.GetQuotes(tweetWords)
-    for i in range(len(tweetWords)):
-        features = fe.Extract(tweetWords, pos, chunk, i, goodCap) + ['DOMAIN=Twitter']
-        if quotes[i]:
-            features.append("QUOTED")
-        seq_features.append(" ".join(features))
-    ner.stdin.write(("\t".join(seq_features) + "\n").encode('utf8'))
+quotes = Features.GetQuotes(tweetWords)
+for i in range(len(tweetWords)):
+    features = fe.Extract(tweetWords, pos, chunk, i, goodCap) + ['DOMAIN=Twitter']
+    if quotes[i]:
+        features.append("QUOTED")
+    seq_features.append(" ".join(features))
+ner.stdin.write(("\t".join(seq_features) + "\n").encode('utf8'))
 
 
-    for i in range(len(tweetWords)):
-        tags.append(ner.stdout.readline().rstrip('\n').strip(' '))
-    #print "Tags before"
-    #print tags
-    tweetTags = []
-    for i in range(len(tags)):
-        tweetTags.append(tags[i])
-    features = LdaFeatures(tweetWords, tags)
+for i in range(len(tweetWords)):
+    tags.append(ner.stdout.readline().rstrip('\n').strip(' '))
+#print "Tags before"
+#print tags
+tweetTags = []
+for i in range(len(tags)):
+    tweetTags.append(tags[i])
+features = LdaFeatures(tweetWords, tags)
 
-    for i in range(len(features.entities)):
-        type = None
-        wids = [str(vocab.GetID(x.lower())) for x in features.features[i] if vocab.HasWord(x.lower())]
-        if llda and len(wids) > 0:
-            entityid = "-1"
-            if entityMap.has_key(features.entityStrings[i].lower()):
-                entityid = str(entityMap[features.entityStrings[i].lower()])
-            labels = dictionaries.GetDictVector(features.entityStrings[i])
+for i in range(len(features.entities)):
+    type = None
+    wids = [str(vocab.GetID(x.lower())) for x in features.features[i] if vocab.HasWord(x.lower())]
+    if llda and len(wids) > 0:
+        entityid = "-1"
+        if entityMap.has_key(features.entityStrings[i].lower()):
+            entityid = str(entityMap[features.entityStrings[i].lower()])
+        labels = dictionaries.GetDictVector(features.entityStrings[i])
 
-            if sum(labels) == 0:
-                labels = [1 for x in labels]
-            llda.stdin.write("\t".join([entityid, " ".join(wids), " ".join([str(x) for x in labels])]) + "\n")
-            sample = llda.stdout.readline().rstrip('\n')
-            labels = [dict2label[dictMap[int(x)]] for x in sample[4:len(sample)-8].split(' ')]
+        if sum(labels) == 0:
+            labels = [1 for x in labels]
+        llda.stdin.write("\t".join([entityid, " ".join(wids), " ".join([str(x) for x in labels])]) + "\n")
+        sample = llda.stdout.readline().rstrip('\n')
+        labels = [dict2label[dictMap[int(x)]] for x in sample[4:len(sample)-8].split(' ')]
 
-            count = {}
-            for label in labels:
-                count[label] = count.get(label, 0.0) + 1.0
-            maxL = None
-            maxP = 0.0
-            for label in count.keys():
-                p = count[label] / float(len(count))
-                if p > maxP or maxL == None:
-                    maxL = label
-                    maxP = p
+        count = {}
+        for label in labels:
+            count[label] = count.get(label, 0.0) + 1.0
+        maxL = None
+        maxP = 0.0
+        for label in count.keys():
+            p = count[label] / float(len(count))
+            if p > maxP or maxL == None:
+                maxL = label
+                maxP = p
 
-            if maxL != 'None':
-                tags[features.entities[i][0]] = "B-%s" % (maxL)
-                for j in range(features.entities[i][0]+1,features.entities[i][1]):
-                    tags[j] = "I-%s" % (maxL)
-            else:
-                tags[features.entities[i][0]] = "O"
-                for j in range(features.entities[i][0]+1,features.entities[i][1]):
-                    tags[j] = "O"
-        else:
-            tags[features.entities[i][0]] = "B-ENTITY"
+        if maxL != 'None':
+            tags[features.entities[i][0]] = "B-%s" % (maxL)
             for j in range(features.entities[i][0]+1,features.entities[i][1]):
-                tags[j] = "I-ENTITY"
-
-    #print "Tags after"
-    #print tags
-
-    # now, we have tweet, tags, event, entity - we need to remove links from tweet
-    tweetWords2 = []
-    tweetTags2 = []
-
-    for i in range(len(tweetTags)):
-        if "http" in tweetWords[i] or "https" in tweetWords[i]:
-            continue
-        elif "pic." in tweetWords[i]:
-            continue
+                tags[j] = "I-%s" % (maxL)
         else:
-            tweetWords2.append(tweetWords[i])
-            tweetTags2.append(tweetTags[i])
-    for i in range(len(tweetTags2)):
-        if ":" in tweetTags2[i]:
-            tweetTags2[i] = tweetTags2[i].split(":")[0]
-        else:
-            tweetTags2[i] = tweetTags2[i]
-    #code below should be similar to ppnewevents.py and ppnewevents2.py - helps in replacing TARGET and OPPONENT
-    # tweetWords2, tweetTags2, item = ent1, event
-        
-    ent1 = doi[1].strip()
-    if len(ent1.split()) > 1:
-        ent1 = ent1.split()[-1].strip()
-    segments = getsegments(tweetWords2, tweetTags2, "ENTITY")
-    for segment in segments:
-        segEnt = segment[0].split()[-1].strip()
-        print segEnt
-        #print segEnt.lower(), ent1.lower()
-        if segEnt.lower().strip() == ent1.lower().strip():
-            tweetWords2 = modTweetTargetEnt1(tweetWords2, segment[1])
+            tags[features.entities[i][0]] = "O"
+            for j in range(features.entities[i][0]+1,features.entities[i][1]):
+                tags[j] = "O"
+    else:
+        tags[features.entities[i][0]] = "B-ENTITY"
+        for j in range(features.entities[i][0]+1,features.entities[i][1]):
+            tags[j] = "I-ENTITY"
+
+#print "Tags after"
+#print tags
+
+# now, we have tweet, tags, event, entity - we need to remove links from tweet
+tweetWords2 = []
+tweetTags2 = []
+
+for i in range(len(tweetTags)):
+    if "http" in tweetWords[i] or "https" in tweetWords[i]:
+        continue
+    elif "pic." in tweetWords[i]:
+        continue
+    else:
+        tweetWords2.append(tweetWords[i])
+        tweetTags2.append(tweetTags[i])
+for i in range(len(tweetTags2)):
+    if ":" in tweetTags2[i]:
+        tweetTags2[i] = tweetTags2[i].split(":")[0]
+    else:
+        tweetTags2[i] = tweetTags2[i]
+#code below should be similar to ppnewevents.py and ppnewevents2.py - helps in replacing TARGET and OPPONENT
+# tweetWords2, tweetTags2, item = ent1, event
+    
+ent1 = doi[1].strip()
+if len(ent1.split()) > 1:
+    ent1 = ent1.split()[-1].strip()
+segments = getsegments(tweetWords2, tweetTags2, "ENTITY")
+for segment in segments:
+    segEnt = segment[0].split()[-1].strip()
+    print(segEnt)
+    #print segEnt.lower(), ent1.lower()
+    if segEnt.lower().strip() == ent1.lower().strip():
+        tweetWords2 = modTweetTargetEnt1(tweetWords2, segment[1])
+        tweetTags2 = modTweetTarTags(tweetTags2, segment[1])
+segments = getsegments(tweetWords2, tweetTags2, "ENTITY")
+for segment in segments:
+    segEnt = segment[0].split()[-1].strip()
+    for oppEnt in contenders:
+        #print segEnt.lower(), oppEnt.lower()
+        if segEnt.lower().strip() == oppEnt.lower().strip():
+            tweetWords2 = modTweetTargetOpp(tweetWords2, segment[1])
             tweetTags2 = modTweetTarTags(tweetTags2, segment[1])
-    segments = getsegments(tweetWords2, tweetTags2, "ENTITY")
-    for segment in segments:
-        segEnt = segment[0].split()[-1].strip()
-        for oppEnt in contenders:
-            #print segEnt.lower(), oppEnt.lower()
-            if segEnt.lower().strip() == oppEnt.lower().strip():
-                tweetWords2 = modTweetTargetOpp(tweetWords2, segment[1])
-                tweetTags2 = modTweetTarTags(tweetTags2, segment[1])
-                break
-    #print tweetWords2
-    #print tweetTags2
-
-    #now have code from pp2NewEvents.py
-        
-    ent1 = doi[1].strip()
-    if len(ent1.split()) > 1:
-        ent1 = ent1.split()[-1].strip()
-    mtweetWords = removeHashTags(tweetWords2)
-    for i in range(len(mtweetWords)):
-        #print mtweet[i].strip().lower(), entity.lower()
-        if ent1.lower() in mtweetWords[i].strip().lower():
-            mtweetWords[i] = "TARGET1"
-            tweetTags2[i] = "MOD"
-	else:
-	    for oppent in contenders:
-		if oppent.lower() in mtweetWords[i].strip().lower():
-		    mtweetWords[i] = "OPPONENT"
-		    tweetTags2[i] = "MOD"
-    mtweetWords = reinstateHT(mtweetWords, tweetWords2)
-
-    segments = getsegments(mtweetWords, tweetTags2, "ENTITY")
-    #print segments
-    segment = None
-    if len(segments) > 0:
-            segment = segments[0]
-    count = 1
-    while segment != None:
-            print segment
-            #if not "Oscar" in segment[0] and not "NFL" in segment[0] and not "Ballon" in segment[0] and not "Eurovision" in segment[0] and not "World" in segment[0]:
-            if not event in segment[0]:
-                    mtweetWords = collapseEntities(mtweetWords, segment[1])
-                    tweetTags2 = collapseEntityTags(tweetTags2, segment[1])
-                    segments = getsegments(mtweetWords, tweetTags2, "ENTITY")
-                    if len(segments) > 0:
-                            segment = segments[0]
-                    else:
-                            segment = None
-            elif count < len(segments):
-                    segment = segments[count]
-                    count += 1
-            else:
-                    segment = None
-
-    print "Final  tweet and tags"
-    # add START and END tags
-    mtweetWords.insert(0, '<S>')
-    mtweetWords.append('</S>')
-    print tweetText
-    print mtweetWords
-    tweetTags2.insert(0, 'START')
-    tweetTags2.append('END')
-    print tweetTags2
-    remainingData = []
-    remainingData.append(event)
-    remainingData.append(doi[1])
-       
-    #generate features using feature code
-    tweetFeatures = {}
-    keyword = "win"
-    computeEntityFeaturesTarget1(mtweetWords, tweetTags2, tweetFeatures)
-    computePairFeatures("TARGET1", keyword, mtweetWords, tweetTags2, tweetFeatures)
-    computeOpponentFeatures(mtweetWords, tweetTags2, tweetFeatures)
-    computeOpponentKeywordFeatures("OPPONENT", keyword, mtweetWords, tweetTags2, tweetFeatures)
-    EndsWithExclamation(mtweetWords, tweetTags2, tweetFeatures)
-    EndsWithQuestion(mtweetWords, tweetTags2, tweetFeatures)
-    EndsWithPeriod(mtweetWords, tweetTags2, tweetFeatures)
-    containsQuestion(mtweetWords, tweetTags2, tweetFeatures)
-    containsExclamation(mtweetWords, tweetTags2, tweetFeatures)
-    #entityHasNegation("TARGET1", keyword, mtweetWords, tweetTags2, tweetFeatures)
-    distanceToKwd("TARGET1", "OPPONENT", keyword, mtweetWords, tweetTags2, tweetFeatures)
-    print "generated features"
-    print tweetFeatures
-    fpdp = open("tweet1.txt", 'w')
-    fpdp.writelines(str(tweetText.encode('utf-8')) + "\n")
-    fpdp.close()
-    os.system("bash tweeboparser/TweeboParser/run.sh tweet1.txt")
-    storedDatadp = []
-    fpdp = open("tweeboparser/TweeboParser/tweet1.txt.predict", 'r')
-    for line in fpdp.readlines():
-	storedDatadp.append(line.split('\t'))
-    dpParse = []
-    for item in storedDatadp:
-	if len(item) == 1:
             break
-	else:
-	    wordData = []
-	    wordData.append(item[1])
-            wordData.append(item[-2])
-	    wordData.append(item[3])
-	    dpParse.append(wordData)
-    #now, we can use dpParse, event and entity
-    # code will be similar to nevent_creatematrix.py
-    length = len(dpParse)
-    edge = np.zeros((length+1, length+1))
-    direction = np.zeros((length+1, length+1))
-    for i in range(len(dpParse)):
-        curWordIndex = i+1
-        edgeIndex = int(dpParse[i][1])
-        if edgeIndex <= 0:
-            continue
+#print tweetWords2
+#print tweetTags2
+
+#now have code from pp2NewEvents.py
+    
+ent1 = doi[1].strip()
+if len(ent1.split()) > 1:
+    ent1 = ent1.split()[-1].strip()
+mtweetWords = removeHashTags(tweetWords2)
+for i in range(len(mtweetWords)):
+    #print mtweet[i].strip().lower(), entity.lower()
+    if ent1.lower() in mtweetWords[i].strip().lower():
+        mtweetWords[i] = "TARGET1"
+        tweetTags2[i] = "MOD"
+else:
+    for oppent in contenders:
+        if oppent.lower() in mtweetWords[i].strip().lower():
+            mtweetWords[i] = "OPPONENT"
+            tweetTags2[i] = "MOD"
+mtweetWords = reinstateHT(mtweetWords, tweetWords2)
+
+segments = getsegments(mtweetWords, tweetTags2, "ENTITY")
+#print segments
+segment = None
+if len(segments) > 0:
+        segment = segments[0]
+count = 1
+while segment != None:
+        print(segment)
+        #if not "Oscar" in segment[0] and not "NFL" in segment[0] and not "Ballon" in segment[0] and not "Eurovision" in segment[0] and not "World" in segment[0]:
+        if not event in segment[0]:
+                mtweetWords = collapseEntities(mtweetWords, segment[1])
+                tweetTags2 = collapseEntityTags(tweetTags2, segment[1])
+                segments = getsegments(mtweetWords, tweetTags2, "ENTITY")
+                if len(segments) > 0:
+                        segment = segments[0]
+                else:
+                        segment = None
+        elif count < len(segments):
+                segment = segments[count]
+                count += 1
         else:
-            edge[curWordIndex][edgeIndex] = 1
-            edge[edgeIndex][curWordIndex] =1
-            direction[curWordIndex][edgeIndex] = 2
-            direction[edgeIndex][curWordIndex] = 3
-    #doi[1] is the entity
-    curEntity = ""
-    if len(doi[1].strip().split(' ')) > 1:
-        curEntity = str(doi[1].strip().split(' ')[-1].lower())
+                segment = None
+
+print("Final  tweet and tags")
+# add START and END tags
+mtweetWords.insert(0, '<S>')
+mtweetWords.append('</S>')
+print(tweetText)
+print(mtweetWords)
+tweetTags2.insert(0, 'START')
+tweetTags2.append('END')
+print(tweetTags2)
+remainingData = []
+remainingData.append(event)
+remainingData.append(doi[1])
+    
+#generate features using feature code
+tweetFeatures = {}
+keyword = "win"
+computeEntityFeaturesTarget1(mtweetWords, tweetTags2, tweetFeatures)
+computePairFeatures("TARGET1", keyword, mtweetWords, tweetTags2, tweetFeatures)
+computeOpponentFeatures(mtweetWords, tweetTags2, tweetFeatures)
+computeOpponentKeywordFeatures("OPPONENT", keyword, mtweetWords, tweetTags2, tweetFeatures)
+EndsWithExclamation(mtweetWords, tweetTags2, tweetFeatures)
+EndsWithQuestion(mtweetWords, tweetTags2, tweetFeatures)
+EndsWithPeriod(mtweetWords, tweetTags2, tweetFeatures)
+containsQuestion(mtweetWords, tweetTags2, tweetFeatures)
+containsExclamation(mtweetWords, tweetTags2, tweetFeatures)
+#entityHasNegation("TARGET1", keyword, mtweetWords, tweetTags2, tweetFeatures)
+distanceToKwd("TARGET1", "OPPONENT", keyword, mtweetWords, tweetTags2, tweetFeatures)
+print("generated features")
+print(tweetFeatures)
+fpdp = open("tweet1.txt", 'w')
+fpdp.writelines(str(tweetText.encode('utf-8')) + "\n")
+fpdp.close()
+os.system("bash tweeboparser/TweeboParser/run.sh tweet1.txt")
+storedDatadp = []
+fpdp = open("tweeboparser/TweeboParser/tweet1.txt.predict", 'r')
+for line in fpdp.readlines():
+    storedDatadp.append(line.split('\t'))
+dpParse = []
+for item in storedDatadp:
+    if len(item) == 1:
+            break
     else:
-        curEntity = str(doi[1].strip().lower())
-    startIndices = []
-    storePaths = []
-    for i,attr in enumerate(dpParse):
-        if curEntity in attr[0].lower():#and attr[-1] == "^":
-            startIndices.append(i+1)
-    for idx in startIndices:
-        visit = set()
-        path = ""
-        DFSwithsource(edge, direction, visit, path, dpParse, idx, "win", storePaths)
-    #print "store paths in between"
-    #print storePaths
-    for item in contenders:
-        if not item.strip().lower() == curEntity.strip().lower():
-            print item
-            #Then it is an opponent entity
-            oppIndices = []
-            for i, attr in enumerate(dpParse):
-                #print attr[0].lower()
-                #print item.lower().strip(), attr[0].lower().strip()
-                if item.lower().strip() in attr[0].lower():
-                    print "added"
-                    oppIndices.append(i+1)
-            print oppIndices
-            for idx in oppIndices:
-                visit = set()
-                path = ""
-                DFSwithsourceopponent(edge, direction, visit, path, dpParse, idx, "win", storePaths)
+        wordData = []
+        wordData.append(item[1])
+        wordData.append(item[-2])
+        wordData.append(item[3])
+        dpParse.append(wordData)
+#now, we can use dpParse, event and entity
+# code will be similar to nevent_creatematrix.py
+length = len(dpParse)
+edge = np.zeros((length+1, length+1))
+direction = np.zeros((length+1, length+1))
+for i in range(len(dpParse)):
+    curWordIndex = i+1
+    edgeIndex = int(dpParse[i][1])
+    if edgeIndex <= 0:
+        continue
+    else:
+        edge[curWordIndex][edgeIndex] = 1
+        edge[edgeIndex][curWordIndex] =1
+        direction[curWordIndex][edgeIndex] = 2
+        direction[edgeIndex][curWordIndex] = 3
+#doi[1] is the entity
+curEntity = ""
+if len(doi[1].strip().split(' ')) > 1:
+    curEntity = str(doi[1].strip().split(' ')[-1].lower())
+else:
+    curEntity = str(doi[1].strip().lower())
+startIndices = []
+storePaths = []
+for i,attr in enumerate(dpParse):
+    if curEntity in attr[0].lower():#and attr[-1] == "^":
+        startIndices.append(i+1)
+for idx in startIndices:
     visit = set()
-    danglingNegation(edge, visit, dpParse, "win", storePaths)
-    print "parse tree features"
-    print storePaths
-    for item in storePaths:
-	if not item in tweetFeatures:
-	    tweetFeatures[item] = 1
-    print "final features"
-    print tweetFeatures
-    fpmodelSaved = open('train.save', 'rb')
-    lrModel = pickle.load(fpmodelSaved)
-    resultVer = []
-    probabilitiesVer = []
-    threshold = 0.64
-    resultVer.append(lrModel.Predict(tweetFeatures))
-    probabilitiesVer.append(lrModel.PredictProba(tweetFeatures))
-    if resultVer[0][0] == 1:
-	print "predicted negative"
-    elif resultVer[0][0] == 2:
-	print "predicted neutral"
-    else:
-	print "predicted positive"
+    path = ""
+    DFSwithsource(edge, direction, visit, path, dpParse, idx, "win", storePaths)
+#print "store paths in between"
+#print storePaths
+for item in contenders:
+    if not item.strip().lower() == curEntity.strip().lower():
+        print(item)
+        #Then it is an opponent entity
+        oppIndices = []
+        for i, attr in enumerate(dpParse):
+            #print attr[0].lower()
+            #print item.lower().strip(), attr[0].lower().strip()
+            if item.lower().strip() in attr[0].lower():
+                print("added")
+                oppIndices.append(i+1)
+        print(oppIndices)
+        for idx in oppIndices:
+            visit = set()
+            path = ""
+            DFSwithsourceopponent(edge, direction, visit, path, dpParse, idx, "win", storePaths)
+visit = set()
+danglingNegation(edge, visit, dpParse, "win", storePaths)
+print("parse tree features")
+print(storePaths)
+for item in storePaths:
+    if not item in tweetFeatures:
+        tweetFeatures[item] = 1
+        print("final features")
+        print(tweetFeatures)
+fpmodelSaved = open('train.save', 'rb')
+lrModel = pickle.load(fpmodelSaved)
+resultVer = []
+probabilitiesVer = []
+threshold = 0.64
+resultVer.append(lrModel.Predict(tweetFeatures))
+probabilitiesVer.append(lrModel.PredictProba(tweetFeatures))
+if resultVer[0][0] == 1:
+    print("predicted negative")
+elif resultVer[0][0] == 2:
+    print("predicted neutral")
+else:
+    print("predicted positive")
     #print "predicted label" + str(resultVer[0])
-    print "predicted probability :" + str(probabilitiesVer[0][0][resultVer[0]-1])
-    if resultVer[0] == 3 and probabilitiesVer[0][0][resultVer[0]-1] > threshold:
-	print "Found positive veridicality for " + str(doi[1])
-	#scores[item] = scores[item] + 1
-	#recomputeScores()
+    print("predicted probability :" + str(probabilitiesVer[0][0][resultVer[0]-1]))
+if resultVer[0] == 3 and probabilitiesVer[0][0][resultVer[0]-1] > threshold:
+    print("Found positive veridicality for " + str(doi[1]))
+    #scores[item] = scores[item] + 1
+    #recomputeScores()
     #print "Predictions for winners in %"
     #displayScores()

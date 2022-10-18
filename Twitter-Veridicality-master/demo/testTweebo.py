@@ -13,4 +13,4 @@ os.system("bash tweeboparser/TweeboParser/run.sh tweet1.txt")
 fp = open("tweeboparser/TweeboParser/tweet1.txt.predict")
 
 for line in fp.readlines():
-    print line
+    print(line)
