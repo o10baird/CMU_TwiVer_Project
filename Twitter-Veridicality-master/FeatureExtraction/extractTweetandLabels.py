@@ -10,7 +10,7 @@ data = csv.reader(fp)
 fp2 = open(sys.argv[1].replace(".csv", "_formodel.csv"), 'w')
 fout = csv.writer(fp2)
 
-event  = "Presidential Elections"
+event  = "Ukraine"
 
 counter = 0
 for row in data:
