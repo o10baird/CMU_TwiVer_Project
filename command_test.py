@@ -12,7 +12,7 @@ do the following...
 
 I've included some documentation and comments below
 '''
-
+import twarc
 import subprocess
 import pandas as pd
 import urllib.parse as urlparse
