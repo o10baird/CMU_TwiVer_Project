@@ -2,9 +2,4 @@ nagorno-karabakh
 azerbaijan
 armenia
 strike OR strikes
-war
-invade OR invasion
-offensive
-destroy OR destroys
-fight OR fights
-assault
+invade OR invasion OR attack
