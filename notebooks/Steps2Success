@@ -1,0 +1,41 @@
+1. Extract Statements that make explicit Predictions.
+
+1.1. Relevant messages were collected by formulating queries to the Twitter search interface that include the name of a contenderr for a given contest in conjunction with the keyword *win*. (Table 3 has example queries). We added an event prefix, a keyword, and the relevant date range for the event. 
+
+1.2. Restricted Results to english language.
+
+1.3. Removed URLs and removed duplicates via Jaccard similiarty (Lui and Baldwin, 2012). Preserved only tweets that mention contenders in the text.
+
+2. Mechanical Turk Annotation (1,841 winner and 1,702 loser annotations)
+2.1. Asked Turkers to rate 1-5 for veridicality and 1-5 for desire of a given outcome. 
+
+2.2. Used MACE (Hovy et al., 2013) to resolve differences between annotators and produce single gold label for each tweet.
+
+
+3. Veridicality Classifier
+3.1. Collapse veridicality down to only positive, negative, and neutral. 
+
+3.2. Log-Linear model used to model conditional probability --> P(y=v | c, tweet) ~ exp(sigma * f(c, O, tweet))
+
+3.2.1. Feature extraction for f(c, O, tweet) done via pre-processing (Ritter et al., 2011) for Named Entity Recognition got the following 
+* Target (t)
+* Opponent (O)
+* Entity (e)
+
+I think that this step might be easier for us. There is only one target... Russia. That means there are also 0 opponents. 
+
+3.2.2. Features They Extracted
+3.2.2.1. Target and Opponent Contexts
+3.2.2.2. Keyword Context --> I think this one will be our money maker
+3.2.2.3. Pair Context --> Also similar for us. "For the election type of events, in which two target entities are present (contender and state. e.g., Clinton, Ohio), we extrat words between these two entities: e.g., t_1 will win t_2"
+3.2.2.4. Distance to Keyword --> Distance between t and O to keyword. Could simplify 
+3.2.2.5. Punctuation --> Extra weight given to exclamation points.
+3.2.2.6. Dependency Paths
+3.2.2.7. Negated Keywords --> Remove keywords that feature 'not' or 'never' in front of them. 
+
+3.3. Divide tweets into training set and test set
+
+3.4. Use Maximum A Priori Model via Zhu et al., 1997.
+
+4. Evaluation
+
