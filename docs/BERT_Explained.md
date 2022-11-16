@@ -71,7 +71,7 @@ BERT relies on a Transformer (the attention mechanism that learns contextual rel
 
 Essentially, the Transformer stacks a layer that maps sequences to sequences, so the output is also a sequence of vectors with a 1:1 correspondence between input and output tokens at the same index. And as we learnt earlier, BERT does not try to predict the next word in the sentence. Training makes use of the following two strategies:
 
-## 1\. Masked LM (MLM)
+### 1\. Masked LM (MLM)
 
 The idea here is “simple”: Randomly mask out 15% of the words in the input — replacing them with a \[MASK\] token — run the entire sequence through the BERT attention based encoder and then predict only the masked words, based on the context provided by the other non-masked words in the sequence. However, there is a problem with this naive masking approach — the model only tries to predict when the \[MASK\] token is present in the input, while we want the model to try to predict the correct tokens regardless of what token is present in the input. To deal with this issue, out of the 15% of the tokens selected for masking:
 
@@ -81,7 +81,7 @@ The idea here is “simple”: Randomly mask out 15% of the words in the input �
 
 While training the BERT loss function considers only the prediction of the masked tokens and ignores the prediction of the non-masked ones. This results in a model that converges much more slowly than left-to-right or right-to-left models.
 
-## 2\. Next Sentence Prediction (NSP)
+### 2\. Next Sentence Prediction (NSP)
 
 In order to understand _relationship_ between two sentences, BERT training process also uses next sentence prediction. A pre-trained model with this kind of understanding is relevant for tasks like question answering. During training the model gets as input pairs of sentences and it learns to predict if the second sentence is the next sentence in the original text as well.
 
@@ -98,7 +98,7 @@ To predict if the second sentence is connected to the first one or not, basicall
 
 The model is trained with both Masked LM and Next Sentence Prediction together. This is to minimize the combined loss function of the two strategies — _“together is better”_.
 
-## Architecture
+### Architecture
 
 There are four types of pre-trained versions of BERT depending on the scale of the model architecture:
 
