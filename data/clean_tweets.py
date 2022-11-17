@@ -3,6 +3,8 @@ import pandas as pd
 import re
 import click
 from pathlib import Path
+import preprocessor as p
+
 
 def clean_tweet(tweet):
     #print(tweet)
@@ -32,11 +34,13 @@ def clean_tweets(filename):
     processed = filename.stem + "_final.tsv"
     out_path = data_Dir.joinpath(processed)
     #print(out_path)
-    print("Here")
-    print(tweets.head(10))
-    #tweets[1] = tweets[1].map(clean_tweet())
+    #print("Here")
+    #print(tweets.head(10))
+    tweets['hashtag'] = tweets['tweet_text'].apply(lambda x: re.findall(r"#(\w+)", x))
+    for i,v in enumerate(tweets['tweet']):
+        tweets.loc[v,'tweet'] = p.clean(i)
     tweets_processed = tweets.apply(lambda x: clean_tweet(x) if x.name =="tweet" else x)
-    print(tweets_processed.head(10))
+    #print(tweets_processed.head(10))
     #print(tweets.head(10))
     tweets_processed.to_csv(out_path, header=False)
     print("Tweets cleaned")
