@@ -7,16 +7,17 @@ from pathlib import Path
 def clean_tweet(tweet):
     #print(tweet)
     #print('Now Here')
-    temp = tweet.lower()
-    temp = re.sub("'", "", temp) # to avoid removing contractions in english
-    temp = re.sub("@[A-Za-z0-9_]+","", temp)
-    temp = re.sub("#[A-Za-z0-9_]+","", temp)
-    temp = re.sub(r'http\S+', '', temp)
-    temp = re.sub('[()!?]', ' ', temp)
-    temp = re.sub('\[.*?\]',' ', temp)
-    temp = re.sub("[^a-z0-9]"," ", temp)
-    temp = temp.split()
-    return temp
+    for index, temp in tweet.items():
+        temp = str(tweet).lower()
+        temp = re.sub("'", "", temp) # to avoid removing contractions in english
+        temp = re.sub("@[A-Za-z0-9_]+","", temp)
+        temp = re.sub("#[A-Za-z0-9_]+","", temp)
+        temp = re.sub(r'http\S+', '', temp)
+        temp = re.sub('[()!?]', ' ', temp)
+        temp = re.sub('\[.*?\]',' ', temp)
+        temp = re.sub("[^a-z0-9]"," ", temp)
+        temp = temp.split()
+    return tweet
 
 @click.command()
 @click.argument('filename', type=click.Path(exists=True, path_type=Path))
@@ -34,7 +35,7 @@ def clean_tweets(filename):
     print("Here")
     print(tweets.head(10))
     #tweets[1] = tweets[1].map(clean_tweet())
-    tweets_processed = tweets.apply(lambda x: clean_tweet(x) if x.name =="tweet" else x, axis = 1)
+    tweets_processed = tweets.apply(lambda x: clean_tweet(x) if x.name =="tweet" else x)
     print(tweets_processed.head(10))
     #print(tweets.head(10))
     tweets_processed.to_csv(out_path, header=False)
