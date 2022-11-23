@@ -12,23 +12,33 @@ do the following...
 
 I've included some documentation and comments below
 '''
-import twarc
+# import twarc
 import subprocess
 import pandas as pd
 import urllib.parse as urlparse
 
-# Prep the data
-actors = pd.read_csv('actors.csv') # This is a dataframe of actors on twitter and their information
-actors_list = actors['conceptFrom'].to_list() # Create a list from the twitter handles
-actors_handles = [handle for handle in actors_list if handle.startswith('@')] # Filter out the handles that don't start with @
+import subprocess
+import pandas as pd
+import urllib.parse as urlparse
+from datetime import date, timedelta
+
 
 # Commands
 run_num = 0
-for handle in actors_handles: # Loop through the list of handles
-    strip_handle = handle.replace('@', '') # Strip the @ from the handle so that you can have a valid filename
-    encoded_handle = urlparse.encode(handle) # Encode the handle so that it can be used in the query. Honestly though, the whole query needs to be encoded I think. Still researching
-    command = f"twarc2 timeline --limit 5 {encoded_handle} test_files\{strip_handle}.jsonl" # Build the command
-    subprocess.run(command.split()) # Run the command
-    run_num += 1
-    print(f"Run {run_num} of {len(actors_handles)}complete") # Print the run number so you can see how far along you are
 
+
+def daterange(start_date, end_date):
+    for n in range(int((end_date - start_date).days)):
+        yield start_date + timedelta(n)
+
+week_start = date(2022, 2, 10)
+week_end = date(2022, 2, 17)
+for single_date in daterange(week_start, week_end):
+    print(single_date.strftime("%Y-%m-%d"))
+    command = f"twarc2 searches --archive --limit 10000 --start-time {single_date.strftime('%Y-%m-%d')} --end-time {single_date.strftime('%Y-%m-%d')} --combine-queries new_data/ukraine_{single_date.strftime('%Y-%m-%d')}.json"
+
+month_start = date(2021,12,23)
+month_end = date(2022,1,23)
+for single_date in daterange(month_start, month_end):
+    print(single_date.strftime("%Y-%m-%d"))
+    command = f"twarc2 searches --archive --limit 10000 --start-time {single_date.strftime('%Y-%m-%d')} --end-time {single_date.strftime('%Y-%m-%d')} --combine-queries new_data/ukraine_{single_date.strftime('%Y-%m-%d')}.json"
