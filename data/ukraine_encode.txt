@@ -1,0 +1,5 @@
+ukraine+-is%3Aretweet
+russia+-is%3Aretweet
+Putin+-is%3Aretweet
+attack+-is%3Aretweet
+invade+-is%3Aretweet
