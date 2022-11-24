@@ -31,18 +31,19 @@ def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
         yield start_date + timedelta(n)
 
-week_start = date(2022, 2, 10)
-week_end = date(2022, 2, 17)
-for single_date in daterange(week_start, week_end):
-    next_date = single_date + timedelta(days=1)
-    print(single_date.strftime("%Y-%m-%d"))
-    command = f"twarc2 searches --archive --limit 10000 --start-time {single_date.strftime('%Y-%m-%d')} --end-time {next_date.strftime('%Y-%m-%d')} --combine-queries ukraine_encode.txt new_data/ukraine_{single_date.strftime('%Y-%m-%d')}.json"
-    subprocess.run(command.split())
+#week_start = date(2022, 2, 10)
+#week_start = date(2022, 2, 14)
+#week_end = date(2022, 2, 17)
+#for single_date in daterange(week_start, week_end):
+#    next_date = single_date + timedelta(days=1)
+#    print(single_date.strftime("%Y-%m-%d"))
+#    command = f"twarc2 searches --archive --limit 10000 --start-time {single_date.strftime('%Y-%m-%d')} --end-time {next_date.strftime('%Y-%m-%d')} --combine-queries ukraine.txt new_data/ukraine_week_{single_date.strftime('%Y-%m-%d')}.json"
+#    subprocess.run(command.split())
 
-month_start = date(2021,12,23)
-month_end = date(2022,1,23)
+month_start = date(2022,1,23)
+month_end = date(2022,1,24)
 for single_date in daterange(month_start, month_end):
     next_date = single_date + timedelta(days=1)
     print(single_date.strftime("%Y-%m-%d"))
-    command = f"twarc2 searches --archive --limit 10000 --start-time {single_date.strftime('%Y-%m-%d')} --end-time {next_date.strftime('%Y-%m-%d')} --combine-queries ukraine_encode.txt new_data/ukraine_{single_date.strftime('%Y-%m-%d')}.json"
+    command = f"twarc2 searches --archive --limit 10000 --start-time {single_date.strftime('%Y-%m-%d')} --end-time {next_date.strftime('%Y-%m-%d')} --combine-queries ukraine.txt new_data/ukraine_month_{single_date.strftime('%Y-%m-%d')}.json"
     subprocess.run(command.split())

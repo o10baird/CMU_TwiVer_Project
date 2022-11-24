@@ -16,6 +16,15 @@ def process_tweet(filename):
     out_path = data_Dir.joinpath(processed)
     #print(out_path)
     tweets_processed = tweets.loc[:, ['id', 'text']]
+    print("# of tweets: ", len(tweets_processed))
+    tweets_processed = tweets_processed.drop_duplicates(subset=['text'])
+    print("# of tweets: ", len(tweets_processed))
+    total_Dir = path.joinpath('ukraine_turked')
+    total_file = total_Dir.joinpath('ukraine_turked_total')
+    total_turked = pd.read_csv(total_file, dtype='str' , names=['id', 'tweet', 'label', 'time'])
+    total_id = list(total_turked['id'])
+    tweets_processed = tweets_processed[tweets_processed.id.isin(total_id) ==False]
+    print("# of tweets: ", len(tweets_processed))
     tweets_processed.to_csv(out_path, header=False, index=False)
     print("Tweets processed")
 
